@@ -1,64 +1,67 @@
-const path = require("path");
-const HTMLWebpackPlugin = require("html-webpack-plugin");
-const CopyWebpackPlugin = require("copy-webpack-plugin");
+const path = require('path');
+const HTMLWebpackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
-  mode: "development",
+  mode: 'development',
   devServer: {
-    contentBase: "./dist",
+    contentBase: './dist',
     open: true,
   },
-  entry: "./src/index.js",
+  entry: './src/index.js',
   output: {
-    path: path.resolve(__dirname, "dist"),
-    filename: "bundle.js",
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'bundle.js',
   },
   module: {
     rules: [
       {
+        test: /\.m?js$/,
+        exclude: /(node_modules|bower_components)/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env'],
+          },
+        },
+      },
+      {
         test: /\.html$/i,
-        loader: "html-loader",
+        loader: 'html-loader',
       },
       {
         test: /\.s[ac]ss$/i,
         use: [
-          // Creates `style` nodes from JS strings
-          "style-loader",
-          // Translates CSS into CommonJS
-          "css-loader",
-          // Compiles Sass to CSS
-          "sass-loader",
+          'style-loader',
+          'css-loader',
+          'sass-loader',
         ],
       },
       {
         test: /\.(png|jpe?g|gif)$/i,
         use: [
           {
-            loader: "file-loader",
+            loader: 'file-loader',
           },
         ],
       },
       {
         test: /\.svg/,
-        type: "asset/inline",
+        type: 'asset/inline',
       },
     ],
   },
   plugins: [
     new HTMLWebpackPlugin({
-      template: "./src/index.html",
+      template: './src/index.html',
     }),
     new CopyWebpackPlugin({
       patterns: [
         {
-          from: "./src/assets",
-          to: "./assets",
+          from: './src/assets',
+          to: './assets',
         },
       ],
     }),
   ],
 };
-
-//import img from './file.png';
-//import styles from "./style.css";
-//import styles from "./style.scss"; or modules since is auto true
